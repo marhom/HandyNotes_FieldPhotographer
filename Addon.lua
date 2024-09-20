@@ -12,7 +12,7 @@ local HandyNotes = LibStub("AceAddon-3.0"):GetAddon("HandyNotes")
 
 local ACHIEVEMENT_ID = 9924
 local ACHIEVEMENT_NAME = select(2, GetAchievementInfo(ACHIEVEMENT_ID))
-local ADDON_TITLE = GetAddOnMetadata(ADDON_NAME, "Title")
+local ADDON_TITLE = C_AddOns.GetAddOnMetadata(ADDON_NAME, "Title")
 local ICON = "Interface\\AddOns\\"..ADDON_NAME.."\\Camera"
 
 local L = setmetatable({}, { __index = function(t, k) t[k] = k return k end })
@@ -246,8 +246,8 @@ local notes = {
 }
 
 local cameraBuffs = {
-	[(GetSpellInfo(181765)) or ""] = true,
-	[(GetSpellInfo(181884)) or ""] = true,
+	[(C_Spell.GetSpellName(181765)) or ""] = true,
+	[(C_Spell.GetSpellName(181884)) or ""] = true,
 }
 
 local defaults = {
@@ -469,9 +469,9 @@ end
 function Addon:UPDATE_OVERRIDE_ACTIONBAR()
 	local inCamera = false
 	for i = 1, 40 do
-		local name = UnitBuff("player", i)
-		if not name or cameraBuffs[name] then
-			inCamera = name and cameraBuffs[name]
+		local playerAura = C_UnitAuras.GetBuffDataByIndex("player", i)
+		if not playerAura or cameraBuffs[playerAura.name] then
+			inCamera = playerAura and cameraBuffs[playerAura.name]
 			break
 		end
 	end
